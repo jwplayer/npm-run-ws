@@ -56,6 +56,6 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         token: ${{secrets.CODECOV_TOKEN}}
-        files: './test/dist/coverage/coverage-final.json'
+        files: './coverage/coverage-final.json'
         fail_ci_if_error: true
       if: ${{startsWith(env.CI_TEST_TYPE, 'coverage')}}
