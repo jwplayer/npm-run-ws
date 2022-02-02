@@ -11,6 +11,9 @@ const getPkgObject = function(name) {
     description: '',
     main: 'index.js',
     keywords: [],
+    scripts: {
+      foo: "node -e \"fs.writeFileSync('run-test', '')\""
+    },
     author: '',
     license: 'ISC'
   };

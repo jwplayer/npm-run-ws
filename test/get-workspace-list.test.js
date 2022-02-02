@@ -5,7 +5,7 @@ const helpers = require('./helpers.js');
 const getWorkspaceList = require('../src/get-workspace-list.js');
 
 test.beforeEach(helpers.beforeEach);
-test.afterEach(helpers.afterEach);
+test.afterEach.always(helpers.afterEach);
 
 test('finds workspaces using *', function(t) {
   t.context.createWorkspace(path.join('workspaces', 'foo'));

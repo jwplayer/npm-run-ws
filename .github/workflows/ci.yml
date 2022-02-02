@@ -39,23 +39,21 @@ jobs:
         node-version: '${{steps.nvm.outputs.NVMRC}}'
         cache: npm
 
-    # turn off the default setup-node problem watchers...
-    - run: echo "::remove-matcher owner=eslint-compact::"
-    - run: echo "::remove-matcher owner=eslint-stylish::"
-    - run: echo "::remove-matcher owner=tsc::"
+    - name: turn off default setup-node problem watchers
+      run: |
+        echo "::remove-matcher owner=eslint-compact::" \
+        echo "::remove-matcher owner=eslint-stylish::" \
+        echo "::remove-matcher owner=tsc::"
 
     - name: npm install
       run: npm i
 
     - name: run npm test
-      uses: GabrielBB/xvfb-action@v1
-      with:
-        run: npm run test
+      run: npm run test
 
-    - name: coverage
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
-        files: './coverage/coverage-final.json'
-        fail_ci_if_error: true
-      if: ${{startsWith(env.CI_TEST_TYPE, 'coverage')}}
+      #- name: coverage
+      #uses: codecov/codecov-action@v1
+      #with:
+      #  token: ${{secrets.CODECOV_TOKEN}}
+      #  files: './coverage/coverage-final.json'
+      #  fail_ci_if_error: true

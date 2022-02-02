@@ -91,6 +91,20 @@ test('--dry-run sets dryRun', (t) => {
   });
 });
 
+['-q', '--quiet'].forEach(function(arg) {
+  test(`${arg} sets quiet`, (t) => {
+    const options = cli([arg], t.context.console, t.context.exit);
+    const expectedOptions = Object.assign({}, t.context.defaultOptions, {
+      quiet: true
+    });
+
+    t.is(t.context.exitCode, null);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.deepEqual(options, expectedOptions);
+  });
+});
+
 ['-s', '--serial'].forEach(function(arg) {
   test(`${arg} sets serial`, (t) => {
     const options = cli([arg], t.context.console, t.context.exit);

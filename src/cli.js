@@ -14,9 +14,10 @@ const printHelp = function(console) {
   console.log('  -V,  --verbose            Print the output of everything.');
   console.log('  -ip, --if-present         Only run the npm script if present on the workspace.');
   console.log('  -s,  --serial             Run the npm workspace script serially.');
+  console.log('  -q,  --quiet              Do not print anything when commands are being run.');
   console.log('  -ir, --include-root       Run the script on the root workspace as well.');
-  console.log('  -i,  --include [glob]     Run on workspaces that match this. Can pass more than one.');
-  console.log('  -e,  --exclude [glob]     Run on workspaces that do not match this. Can pass more than one');
+  console.log('  -i,  --include [name]     Run on workspaces that match this. Can pass more than one.');
+  console.log('  -e,  --exclude [name]     Run on workspaces that do not match this. Can pass more than one');
   console.log('  -d,  --directory [dir]    Run in this project directory, defaults to cwd.');
   console.log('  --list-workspaces         list workspaces, separated by newlines, with relative directory.');
   console.log('  --dry-run                 Show the ui and commands of what would have been run, without running.');
@@ -40,6 +41,8 @@ const cli = function(args, console, exit) {
       options.verbose = true;
     } else if ((/^-s|--serial$/).test(args[i])) {
       options.serial = true;
+    } else if ((/^-q|--quiet$/).test(args[i])) {
+      options.quiet = true;
     } else if ((/^-ip|--if-present$/).test(args[i])) {
       options.ifPresent = true;
     } else if ((/^-ir|--include-root$/).test(args[i])) {

@@ -23,7 +23,6 @@ npm i --save-dev npm-run-ws
 
 ```
 
-
   Usage: npm-run-ws [--if-present|--include-root] <script-name>
 
   Run npm workspace scripts with extra features like serial, parallel, and root project runs.
@@ -32,9 +31,10 @@ npm i --save-dev npm-run-ws
   -V,  --verbose            Print the output of everything.
   -ip, --if-present         Only run the npm script if present on the workspace.
   -s,  --serial             Run the npm workspace script serially.
+  -q,  --quiet              Do not print anything when commands are being run.
   -ir, --include-root       Run the script on the root workspace as well.
-  -i,  --include [glob]     Run on workspaces that match this. Can pass more than one.
-  -e,  --exclude [glob]     Run on workspaces that do not match this. Can pass more than one
+  -i,  --include [name]     Run on workspaces that match this. Can pass more than one.
+  -e,  --exclude [name]     Run on workspaces that do not match this. Can pass more than one
   -d,  --directory [dir]    Run in this project directory, defaults to cwd.
   --list-workspaces         list workspaces, separated by newlines, with relative directory.
   --dry-run                 Show the ui and commands of what would have been run, without running.

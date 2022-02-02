@@ -32,10 +32,10 @@ const run = function(options) {
     if (options.include || options.exclude) {
       workspaces = workspaces.filter(function(workspace) {
         const shouldInclude = options.include.length ?
-          options.include.some((includeRule) => RegExp(includeRule).test(workspace)) :
+          options.include.some((includeRule) => includeRule === workspace) :
           true;
         const shouldExclude = options.exclude.length ?
-          options.exclude.some((includeRule) => RegExp(includeRule).test(workspace)) :
+          options.exclude.some((excludeRule) => excludeRule === workspace) :
           false;
 
         if (shouldInclude && !shouldExclude) {
@@ -78,6 +78,10 @@ const run = function(options) {
 
     if (isCI_ && !options.verbose) {
       renderer = 'simple';
+    }
+
+    if (options.quiet) {
+      renderer = 'silent';
     }
 
     const runner = new Listr_(tasks, {

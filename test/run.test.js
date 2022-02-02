@@ -42,12 +42,14 @@ test.beforeEach((t) => {
 
   t.context.currentRunner = null;
 
+  t.context.taskFail = false;
+
   t.context.listr = function(tasks, options) {
     const runner = t.context.currentRunner = {
       run: () => {
         runner.tasks.forEach(function(task) {
           if (!task.hasOwnProperty('hasFailed')) {
-            task.hasFailed = () => false;
+            task.hasFailed = () => t.context.taskFail ? true : false;
           }
         });
         return Promise.resolve();
@@ -80,9 +82,7 @@ test.beforeEach((t) => {
     return npmRunWs(options);
   };
 });
-test.afterEach((t) => {
-  helpers.afterEach(t);
-});
+test.afterEach(helpers.afterEach);
 
 test('can list workspaces', function(t) {
   return t.context.npmRunWs({listWorkspaces: true}).then(function(exitCode) {
@@ -99,7 +99,12 @@ test('can list workspaces', function(t) {
 });
 
 test('include works', function(t) {
-  return t.context.npmRunWs({listWorkspaces: true, include: [`${path.sep}a`, `${path.sep}b`]}).then(function(exitCode) {
+  const include = [
+    path.join('workspaces', 'a'),
+    path.join('workspaces', 'b')
+  ];
+
+  return t.context.npmRunWs({listWorkspaces: true, include}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs.sort(), [
       path.join('workspaces', 'a'),
@@ -110,7 +115,12 @@ test('include works', function(t) {
 });
 
 test('exclude works', function(t) {
-  return t.context.npmRunWs({listWorkspaces: true, exclude: [`${path.sep}a`, `${path.sep}b`]}).then(function(exitCode) {
+  const exclude = [
+    path.join('workspaces', 'a'),
+    path.join('workspaces', 'b')
+  ];
+
+  return t.context.npmRunWs({listWorkspaces: true, exclude}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs.sort(), [
       path.join('workspaces', 'c'),
@@ -122,7 +132,16 @@ test('exclude works', function(t) {
 });
 
 test('include and exclude work together', function(t) {
-  return t.context.npmRunWs({listWorkspaces: true, include: [`${path.sep}a`, `${path.sep}c`], exclude: [`${path.sep}a`, `${path.sep}b`]}).then(function(exitCode) {
+  const include = [
+    path.join('workspaces', 'a'),
+    path.join('workspaces', 'c')
+  ];
+  const exclude = [
+    path.join('workspaces', 'a'),
+    path.join('workspaces', 'b')
+  ];
+
+  return t.context.npmRunWs({listWorkspaces: true, include, exclude}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs.sort(), [
       path.join('workspaces', 'c')
@@ -270,6 +289,28 @@ test('verbose works', function(t) {
   });
 });
 
+test('quiet works', function(t) {
+  return t.context.npmRunWs({npmScriptName: 'test', quiet: true}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.truthy(t.context.currentRunner);
+    t.deepEqual(t.context.currentRunner.options, {
+      concurrent: true,
+      exitOnError: false,
+      renderer: 'silent'
+    });
+    const tasks = t.context.currentRunner.tasks;
+
+    t.is(tasks.length, 5);
+    t.is(tasks[0].title, `npm run test --workspace ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `npm run test --workspace ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `npm run test --workspace ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `npm run test --workspace ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `npm run test --workspace ${path.join('workspaces3', 'e')}`);
+  });
+});
+
 test('isCI works', function(t) {
   t.context.isCI = true;
 
@@ -404,5 +445,29 @@ test('dryRun works', function(t) {
 
     // nothing is run thorugh execa
     t.deepEqual(t.context.execaRuns, []);
+  });
+});
+
+test('can fail', function(t) {
+  t.context.taskFail = true;
+
+  return t.context.npmRunWs({npmScriptName: 'test'}).then(function(exitCode) {
+    t.is(exitCode, 1);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.truthy(t.context.currentRunner);
+    t.deepEqual(t.context.currentRunner.options, {
+      concurrent: true,
+      exitOnError: false,
+      renderer: 'default'
+    });
+    const tasks = t.context.currentRunner.tasks;
+
+    t.is(tasks.length, 5);
+    t.is(tasks[0].title, `npm run test --workspace ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `npm run test --workspace ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `npm run test --workspace ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `npm run test --workspace ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `npm run test --workspace ${path.join('workspaces3', 'e')}`);
   });
 });
