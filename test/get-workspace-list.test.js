@@ -19,11 +19,11 @@ test('finds workspaces using *', function(t) {
   }, t.context.dir);
 
   t.deepEqual(list.sort(), [
-    'workspaces/foo',
-    'workspaces/bar',
-    'workspaces/baz',
-    'workspaces2/baz2',
-    'workspaces3/buzz'
+    path.join('workspaces', 'foo'),
+    path.join('workspaces', 'bar'),
+    path.join('workspaces', 'baz'),
+    path.join('workspaces2', 'baz2'),
+    path.join('workspaces3', 'buzz')
   ].sort());
 });
 
@@ -39,9 +39,9 @@ test('finds workspaces using a directory', function(t) {
   }, t.context.dir);
 
   t.deepEqual(list.sort(), [
-    'workspaces/foo',
-    'workspaces2/baz2',
-    'workspaces3/buzz'
+    path.join('workspaces', 'foo'),
+    path.join('workspaces2', 'baz2'),
+    path.join('workspaces3', 'buzz')
   ].sort());
 });
 
@@ -57,11 +57,11 @@ test('finds workspaces using a directory and *', function(t) {
   }, t.context.dir);
 
   t.deepEqual(list.sort(), [
-    'workspaces/foo',
-    'workspaces2/baz2',
-    'workspaces3/buzz',
-    'workspaces/bar',
-    'workspaces/baz'
+    path.join('workspaces', 'foo'),
+    path.join('workspaces2', 'baz2'),
+    path.join('workspaces3', 'buzz'),
+    path.join('workspaces', 'bar'),
+    path.join('workspaces', 'baz')
   ].sort());
 });
 
@@ -100,8 +100,8 @@ test('does not error with a missing workspace dir', function(t) {
   }, t.context.dir);
 
   t.deepEqual(list.sort(), [
-    'workspaces/foo',
-    'workspaces3/buzz'
+    path.join('workspaces', 'foo'),
+    path.join('workspaces3', 'buzz')
   ].sort());
 });
 
@@ -117,7 +117,7 @@ test('does not detect workspace with missing package.json', function(t) {
   }, t.context.dir);
 
   t.deepEqual(list.sort(), [
-    'workspaces/foo',
-    'workspaces3/buzz'
+    path.join('workspaces', 'foo'),
+    path.join('workspaces3', 'buzz')
   ].sort());
 });

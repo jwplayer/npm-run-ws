@@ -34,11 +34,10 @@
     "lint": "vjsstandard",
     "test": "npm-run-all -p -c lint test:*",
     "test:unit": "nyc --reporter=json --reporter=text ava --timeout 1m './test/*.test.js'",
-    "test:verify": "vjsverify --skip-syntax --verbose",
     "preversion": "npm test",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
     "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s",
-    "prepublishOnly": "npm run test:verify"
+    "prepublishOnly": "vjsverify --skip-syntax --verbose"
   },
   "engines": {
     "npm": ">=7"
