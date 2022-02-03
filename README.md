@@ -2,21 +2,23 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [npm-run-ws](#npm-run-ws)
+- [@jwplayer/npm-run-ws](#jwplayernpm-run-ws)
   - [Installation](#installation)
   - [--help](#--help)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# npm-run-ws
+# @jwplayer/npm-run-ws
 
 Run npm workspace scripts with extra features like serial, parallel, and root project runs.
+
+After instalation an `npm-run-ws` binary will be added to our local node modules bin directory for running.
 
 ## Installation
 To install run
 
 ```
-npm i --save-dev npm-run-ws
+npm i --save-dev @jwplayer/npm-run-ws
 ```
 
 ## --help
