@@ -29,7 +29,7 @@ npm i --save-dev @jwplayer/npm-run-ws
 
   Run npm workspace scripts with extra features like serial, parallel, and root project runs.
 
-  -v,  --version            Print the version of videojs-generator-verify.
+  -v,  --version            Print the version of npm-run-ws.
   -V,  --verbose            Print the output of everything.
   -ip, --if-present         Only run the npm script if present on the workspace.
   -s,  --serial             Run the npm workspace script serially.

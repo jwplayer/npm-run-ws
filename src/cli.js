@@ -10,7 +10,7 @@ const printHelp = function(console) {
   console.log();
   console.log(`  ${pkg.description}`);
   console.log();
-  console.log('  -v,  --version            Print the version of videojs-generator-verify.');
+  console.log(`  -v,  --version            Print the version of ${pkg.name}.`);
   console.log('  -V,  --verbose            Print the output of everything.');
   console.log('  -ip, --if-present         Only run the npm script if present on the workspace.');
   console.log('  -s,  --serial             Run the npm workspace script serially.');
