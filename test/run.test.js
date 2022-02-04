@@ -523,3 +523,27 @@ test('can fail', function(t) {
     t.is(tasks[4].title, `npm run test --workspace ${path.join('workspaces3', 'e')}`);
   });
 });
+
+test('failure without npm script name', function(t) {
+  t.context.taskFail = true;
+
+  return t.context.npmRunWs().then(function(exitCode) {
+    t.is(exitCode, 1);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, [
+      'An npm script name to run is required!'
+    ]);
+  });
+});
+
+test('failure without a valid workspace', function(t) {
+  t.context.taskFail = true;
+
+  return t.context.npmRunWs({npmScriptName: 'test', include: ['nope']}).then(function(exitCode) {
+    t.is(exitCode, 1);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, [
+      'no workspaces found to run on with given arguments!'
+    ]);
+  });
+});

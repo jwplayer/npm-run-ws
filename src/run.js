@@ -52,6 +52,12 @@ const run = function(options) {
       return Promise.resolve(0);
     }
 
+    if (!workspaces.length) {
+      console_.error('no workspaces found to run on with given arguments!');
+
+      return Promise.resolve(1);
+    }
+
     if (!options.npmScriptName) {
       console_.error('An npm script name to run is required!');
       return Promise.resolve(1);
