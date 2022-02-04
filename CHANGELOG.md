@@ -1,3 +1,15 @@
+<a name="0.1.0"></a>
+# [0.1.0](https://github.com/jwplayer/npm-run-ws/compare/v0.0.1...v0.1.0) (2022-02-04)
+
+### Features
+
+* allow selecting the simple renderer ([74c39fa](https://github.com/jwplayer/npm-run-ws/commit/74c39fa))
+* support include/exclude of workspaces by basename ([ea0c6bb](https://github.com/jwplayer/npm-run-ws/commit/ea0c6bb))
+
+### Documentation
+
+* fix a typo ([12e0d0e](https://github.com/jwplayer/npm-run-ws/commit/12e0d0e))
+
 <a name="0.0.1"></a>
 ## 0.0.1 (2022-02-04)
 
