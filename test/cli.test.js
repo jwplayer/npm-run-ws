@@ -78,10 +78,10 @@ test('--dry-run sets dryRun', (t) => {
 });
 
 ['-V', '--verbose'].forEach(function(arg) {
-  test(`${arg} sets verbose`, (t) => {
+  test(`${arg} sets renderer to verbose`, (t) => {
     const options = cli([arg], t.context.console, t.context.exit);
     const expectedOptions = Object.assign({}, t.context.defaultOptions, {
-      verbose: true
+      renderer: 'verbose'
     });
 
     t.is(t.context.exitCode, null);
@@ -92,10 +92,24 @@ test('--dry-run sets dryRun', (t) => {
 });
 
 ['-q', '--quiet'].forEach(function(arg) {
-  test(`${arg} sets quiet`, (t) => {
+  test(`${arg} sets renderer to silent`, (t) => {
     const options = cli([arg], t.context.console, t.context.exit);
     const expectedOptions = Object.assign({}, t.context.defaultOptions, {
-      quiet: true
+      renderer: 'silent'
+    });
+
+    t.is(t.context.exitCode, null);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.deepEqual(options, expectedOptions);
+  });
+});
+
+['-si', '--simple'].forEach(function(arg) {
+  test(`${arg} sets renderer to simple`, (t) => {
+    const options = cli([arg], t.context.console, t.context.exit);
+    const expectedOptions = Object.assign({}, t.context.defaultOptions, {
+      renderer: 'simple'
     });
 
     t.is(t.context.exitCode, null);
@@ -240,7 +254,7 @@ test('can set multiple arguments', (t) => {
     exclude: ['foo'],
     includeRoot: true,
     ifPresent: true,
-    verbose: true,
+    renderer: 'verbose',
     npmScriptName: 'foo',
     serial: true
   });

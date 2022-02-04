@@ -74,20 +74,14 @@ const run = function(options) {
       };
     });
 
-    let renderer = options.verbose ? 'verbose' : 'default';
-
-    if (isCI_ && !options.verbose) {
-      renderer = 'simple';
-    }
-
-    if (options.quiet) {
-      renderer = 'silent';
+    if (isCI_ && options.renderer === 'default') {
+      options.renderer = 'simple';
     }
 
     const runner = new Listr_(tasks, {
       concurrent: (options.serial ? false : true),
       exitOnError: false,
-      renderer
+      renderer: options.renderer
     });
 
     if (options.dryRun) {

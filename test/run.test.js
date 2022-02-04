@@ -320,7 +320,7 @@ test('includeRoot + ifPresent works', function(t) {
 });
 
 test('verbose works', function(t) {
-  return t.context.npmRunWs({npmScriptName: 'test', verbose: true}).then(function(exitCode) {
+  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'verbose'}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
@@ -342,7 +342,7 @@ test('verbose works', function(t) {
 });
 
 test('quiet works', function(t) {
-  return t.context.npmRunWs({npmScriptName: 'test', quiet: true}).then(function(exitCode) {
+  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'silent'}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
@@ -390,7 +390,7 @@ test('isCI works', function(t) {
 test('isCI + verbose works', function(t) {
   t.context.isCI = true;
 
-  return t.context.npmRunWs({npmScriptName: 'test', verbose: true}).then(function(exitCode) {
+  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'verbose'}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
