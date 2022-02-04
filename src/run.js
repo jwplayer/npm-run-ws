@@ -32,10 +32,10 @@ const run = function(options) {
     if (options.include || options.exclude) {
       workspaces = workspaces.filter(function(workspace) {
         const shouldInclude = options.include.length ?
-          options.include.some((includeRule) => includeRule === workspace) :
+          options.include.some((includeRule) => includeRule === workspace || includeRule === path.basename(workspace)) :
           true;
         const shouldExclude = options.exclude.length ?
-          options.exclude.some((excludeRule) => excludeRule === workspace) :
+          options.exclude.some((excludeRule) => excludeRule === workspace || excludeRule === path.basename(workspace)) :
           false;
 
         if (shouldInclude && !shouldExclude) {

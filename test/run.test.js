@@ -114,10 +114,43 @@ test('include works', function(t) {
   });
 });
 
+test('include works with basename', function(t) {
+  const include = [
+    'a',
+    'b'
+  ];
+
+  return t.context.npmRunWs({listWorkspaces: true, include}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs.sort(), [
+      path.join('workspaces', 'a'),
+      path.join('workspaces', 'b')
+    ].sort());
+    t.deepEqual(t.context.errors, []);
+  });
+});
+
 test('exclude works', function(t) {
   const exclude = [
     path.join('workspaces', 'a'),
     path.join('workspaces', 'b')
+  ];
+
+  return t.context.npmRunWs({listWorkspaces: true, exclude}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs.sort(), [
+      path.join('workspaces', 'c'),
+      path.join('workspaces2', 'd'),
+      path.join('workspaces3', 'e')
+    ].sort());
+    t.deepEqual(t.context.errors, []);
+  });
+});
+
+test('exclude works with basename', function(t) {
+  const exclude = [
+    'a',
+    'b'
   ];
 
   return t.context.npmRunWs({listWorkspaces: true, exclude}).then(function(exitCode) {
@@ -139,6 +172,25 @@ test('include and exclude work together', function(t) {
   const exclude = [
     path.join('workspaces', 'a'),
     path.join('workspaces', 'b')
+  ];
+
+  return t.context.npmRunWs({listWorkspaces: true, include, exclude}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs.sort(), [
+      path.join('workspaces', 'c')
+    ].sort());
+    t.deepEqual(t.context.errors, []);
+  });
+});
+
+test('include and exclude work together with basename', function(t) {
+  const include = [
+    'a',
+    'c'
+  ];
+  const exclude = [
+    'a',
+    'b'
   ];
 
   return t.context.npmRunWs({listWorkspaces: true, include, exclude}).then(function(exitCode) {
