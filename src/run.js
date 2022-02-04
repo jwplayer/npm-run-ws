@@ -30,7 +30,7 @@ const run = function(options) {
       workspaces.push(pkg.name);
     }
 
-    if (options.include || options.exclude) {
+    if (options.include.length || options.exclude.length) {
       workspaces = workspaces.filter(function(workspace) {
         const shouldInclude = options.include.length ?
           options.include.some((includeRule) => includeRule === workspace || includeRule === path.basename(workspace)) :
