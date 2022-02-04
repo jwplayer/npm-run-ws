@@ -51,6 +51,10 @@ test.beforeEach((t) => {
           if (!task.hasOwnProperty('hasFailed')) {
             task.hasFailed = () => t.context.taskFail ? true : false;
           }
+
+          if (task.skip()) {
+            task.skipped = true;
+          }
         });
         return Promise.resolve();
       },
@@ -545,5 +549,37 @@ test('failure without a valid workspace', function(t) {
     t.deepEqual(t.context.errors, [
       'no workspaces found to run on with given arguments!'
     ]);
+  });
+});
+
+test('marks task as skipped if --if-present and non-existent script', function(t) {
+  return t.context.npmRunWs({npmScriptName: 'bar', ifPresent: true, include: ['a']}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.truthy(t.context.currentRunner);
+    const tasks = t.context.currentRunner.tasks;
+
+    t.is(tasks.length, 1);
+    t.is(tasks[0].skipped, true);
+  });
+});
+
+test('marks task as skipped if --if-present and no scripts', function(t) {
+  const pkgObject = helpers.getPkgObject('a');
+
+  delete pkgObject.scripts;
+
+  fs.writeFileSync(path.join(t.context.dir, 'workspaces', 'a', 'package.json'), JSON.stringify(pkgObject, null, 2));
+
+  return t.context.npmRunWs({npmScriptName: 'bar', ifPresent: true, include: ['a']}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.truthy(t.context.currentRunner);
+    const tasks = t.context.currentRunner.tasks;
+
+    t.is(tasks.length, 1);
+    t.is(tasks[0].skipped, true);
   });
 });

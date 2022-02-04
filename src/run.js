@@ -5,6 +5,7 @@ const isCI = require('is-ci');
 const execa = require('execa');
 const getWorkspaceList = require('./get-workspace-list.js');
 const npmCliVersion = require('npm-cli-version');
+const fs = require('fs');
 
 const run = function(options) {
   // dependency injection for tests
@@ -76,6 +77,22 @@ const run = function(options) {
 
       return {
         title: `npm ${args.join(' ')}`,
+        skip: (ctx) => {
+          if (!options.ifPresent) {
+            return false;
+          }
+          let subpkg = pkg;
+
+          if (workspaceName !== pkg.name) {
+            subpkg = JSON.parse(fs.readFileSync(path.join(options.directory, workspaceName, 'package.json')));
+          }
+
+          if (!subpkg.scripts || !subpkg.scripts[options.npmScriptName]) {
+            return true;
+          }
+
+          return false;
+        },
         task: () => options.dryRun ? Promise.resolve() : execa_('npm', args, {all: true, cwd: options.directory})
       };
     });
