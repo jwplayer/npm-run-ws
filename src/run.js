@@ -14,6 +14,14 @@ const run = function(options) {
   const npmCliVersion_ = options.hasOwnProperty('npmCliVersion') ? options.npmCliVersion : npmCliVersion;
   const console_ = options.hasOwnProperty('console') ? options.console : console;
   const execa_ = options.hasOwnProperty('execa') ? options.execa : execa;
+  const execaOptions = {
+    all: true,
+    cwd: options.directory
+  };
+
+  if (options.renderer === 'verbose') {
+    execaOptions.stdio = 'inherit';
+  }
 
   return npmCliVersion_().then(function(version) {
     const npmMajor = parseInt(version.split('.').shift(), 10);
@@ -93,7 +101,7 @@ const run = function(options) {
 
           return false;
         },
-        task: () => options.dryRun ? Promise.resolve() : execa_('npm', args, {all: true, cwd: options.directory})
+        task: () => options.dryRun ? Promise.resolve() : execa_('npm', args, execaOptions)
       };
     });
 

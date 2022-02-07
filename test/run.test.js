@@ -475,6 +475,34 @@ test('sanity check for execa', function(t) {
   });
 });
 
+test('execa verbose', function(t) {
+  return t.context.npmRunWs({npmScriptName: 'test', include: ['a', 'b'], renderer: 'verbose'}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.truthy(t.context.currentRunner);
+    t.deepEqual(t.context.currentRunner.options, {
+      concurrent: true,
+      exitOnError: false,
+      renderer: 'verbose'
+    });
+    const tasks = t.context.currentRunner.tasks;
+
+    t.is(tasks.length, 2);
+
+    tasks.forEach(function(task) {
+      task.task();
+    });
+
+    t.is(t.context.execaRuns.length, 2);
+    // verify the execa command
+    t.deepEqual(t.context.execaRuns, [
+      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir, stdio: 'inherit'}],
+      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'b')], {all: true, cwd: t.context.dir, stdio: 'inherit'}]
+    ]);
+  });
+});
+
 test('dryRun works', function(t) {
   return t.context.npmRunWs({npmScriptName: 'test', dryRun: true}).then(function(exitCode) {
     t.is(exitCode, 0);
