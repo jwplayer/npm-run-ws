@@ -1,3 +1,11 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/jwplayer/npm-run-ws/compare/v0.1.0...v0.1.1) (2022-02-07)
+
+### Bug Fixes
+
+* fail without a valid workspace ([e74b169](https://github.com/jwplayer/npm-run-ws/commit/e74b169))
+* mark tasks as skipped with --if-present and non-existent script ([8373ac6](https://github.com/jwplayer/npm-run-ws/commit/8373ac6))
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/jwplayer/npm-run-ws/compare/v0.0.1...v0.1.0) (2022-02-04)
 
