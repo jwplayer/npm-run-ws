@@ -1,3 +1,10 @@
+<a name="0.2.0"></a>
+# [0.2.0](https://github.com/jwplayer/npm-run-ws/compare/v0.1.3...v0.2.0) (2022-02-08)
+
+### Features
+
+* switch to the simple renderer by default ([1636d8e](https://github.com/jwplayer/npm-run-ws/commit/1636d8e))
+
 <a name="0.1.3"></a>
 ## [0.1.3](https://github.com/jwplayer/npm-run-ws/compare/v0.1.2...v0.1.3) (2022-02-08)
 
