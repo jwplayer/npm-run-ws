@@ -1,3 +1,10 @@
+<a name="0.1.3"></a>
+## [0.1.3](https://github.com/jwplayer/npm-run-ws/compare/v0.1.2...v0.1.3) (2022-02-08)
+
+### Bug Fixes
+
+* it should work in sub directories ([8ccbcf9](https://github.com/jwplayer/npm-run-ws/commit/8ccbcf9))
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/jwplayer/npm-run-ws/compare/v0.1.1...v0.1.2) (2022-02-08)
 
