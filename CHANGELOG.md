@@ -1,3 +1,10 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/jwplayer/npm-run-ws/compare/v0.1.1...v0.1.2) (2022-02-08)
+
+### Bug Fixes
+
+* commands should print to stdout/stderr on verbose ([2f780b4](https://github.com/jwplayer/npm-run-ws/commit/2f780b4))
+
 <a name="0.1.1"></a>
 ## [0.1.1](https://github.com/jwplayer/npm-run-ws/compare/v0.1.0...v0.1.1) (2022-02-07)
 
