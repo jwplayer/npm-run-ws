@@ -242,7 +242,7 @@ test('tasks are as expected', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -264,7 +264,7 @@ test('ifPresent works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -286,7 +286,7 @@ test('includeRoot works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -309,7 +309,7 @@ test('includeRoot + ifPresent works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -378,7 +378,7 @@ test('isCI works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'simple'
+      renderer: 'verbose'
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -391,10 +391,10 @@ test('isCI works', function(t) {
   });
 });
 
-test('isCI + verbose works', function(t) {
+test('isCI + interactive works', function(t) {
   t.context.isCI = true;
 
-  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'verbose'}).then(function(exitCode) {
+  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'default'}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
@@ -402,7 +402,7 @@ test('isCI + verbose works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'verbose'
+      renderer: 'default'
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -424,7 +424,7 @@ test('serial works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: false,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -446,7 +446,7 @@ test('sanity check for execa', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -514,7 +514,7 @@ test('dryRun works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -543,7 +543,7 @@ test('can fail', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -623,7 +623,7 @@ test('works in a subdirectory', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: true,
       exitOnError: false,
-      renderer: 'default'
+      renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
 

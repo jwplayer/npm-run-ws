@@ -7,6 +7,7 @@ const getWorkspaceList = require('./get-workspace-list.js');
 const npmCliVersion = require('npm-cli-version');
 const fs = require('fs');
 const pkgDir = require('pkg-dir');
+const defaultRenderer = require('./get-default-options.js')().renderer;
 
 const run = function(options) {
   // dependency injection for tests
@@ -15,6 +16,10 @@ const run = function(options) {
   const npmCliVersion_ = options.hasOwnProperty('npmCliVersion') ? options.npmCliVersion : npmCliVersion;
   const console_ = options.hasOwnProperty('console') ? options.console : console;
   const execa_ = options.hasOwnProperty('execa') ? options.execa : execa;
+
+  if (isCI_ && options.renderer === defaultRenderer) {
+    options.renderer = 'verbose';
+  }
 
   return Promise.all([
     npmCliVersion_(),
@@ -109,10 +114,6 @@ const run = function(options) {
         task: () => options.dryRun ? Promise.resolve() : execa_('npm', args, execaOptions)
       };
     });
-
-    if (isCI_ && options.renderer === 'default') {
-      options.renderer = 'simple';
-    }
 
     const runner = new Listr_(tasks, {
       concurrent: (options.serial ? false : true),

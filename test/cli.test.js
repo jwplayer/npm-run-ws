@@ -105,11 +105,11 @@ test('--dry-run sets dryRun', (t) => {
   });
 });
 
-['-si', '--simple'].forEach(function(arg) {
-  test(`${arg} sets renderer to simple`, (t) => {
+['-in', '--interactive'].forEach(function(arg) {
+  test(`${arg} sets renderer to default`, (t) => {
     const options = cli([arg], t.context.console, t.context.exit);
     const expectedOptions = Object.assign({}, t.context.defaultOptions, {
-      renderer: 'simple'
+      renderer: 'default'
     });
 
     t.is(t.context.exitCode, null);

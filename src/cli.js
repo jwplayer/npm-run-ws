@@ -15,7 +15,7 @@ const printHelp = function(console) {
   console.log('  -ip, --if-present         Only run the npm script if present on the workspace.');
   console.log('  -s,  --serial             Run the npm workspace script serially.');
   console.log('  -q,  --quiet              Do not print anything when commands are being run.');
-  console.log('  -si, --simple             Only print pass/fail.');
+  console.log('  -in, --interactive        Interactive running list output.');
   console.log('  -ir, --include-root       Run the script on the root workspace as well.');
   console.log('  -i,  --include [name]     Run on workspaces that match this. Can pass more than one.');
   console.log('  -e,  --exclude [name]     Run on workspaces that do not match this. Can pass more than one');
@@ -40,8 +40,8 @@ const cli = function(args, console, exit) {
       return options;
     } else if ((/^-V|--verbose$/).test(args[i])) {
       options.renderer = 'verbose';
-    } else if ((/^-si|--simple$/).test(args[i])) {
-      options.renderer = 'simple';
+    } else if ((/^-in|--interactive$/).test(args[i])) {
+      options.renderer = 'default';
     } else if ((/^-s|--serial$/).test(args[i])) {
       options.serial = true;
     } else if ((/^-q|--quiet$/).test(args[i])) {
