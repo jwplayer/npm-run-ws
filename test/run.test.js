@@ -611,3 +611,34 @@ test('marks task as skipped if --if-present and no scripts', function(t) {
     t.is(tasks[0].skipped, true);
   });
 });
+
+test('works in a subdirectory', function(t) {
+  const directory = path.join(t.context.dir, 'workspaces');
+
+  return t.context.npmRunWs({npmScriptName: 'test', include: ['a'], directory}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+    t.truthy(t.context.currentRunner);
+    t.deepEqual(t.context.currentRunner.options, {
+      concurrent: true,
+      exitOnError: false,
+      renderer: 'default'
+    });
+    const tasks = t.context.currentRunner.tasks;
+
+    t.is(tasks.length, 1);
+    t.is(tasks[0].title, `npm run test --workspace ${path.join('workspaces', 'a')}`);
+
+    tasks.forEach(function(task) {
+      task.task();
+    });
+
+    t.is(t.context.execaRuns.length, 1);
+    // verify the execa command
+    t.deepEqual(t.context.execaRuns, [
+      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir}]
+    ]);
+  });
+});
+

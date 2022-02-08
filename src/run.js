@@ -6,6 +6,7 @@ const execa = require('execa');
 const getWorkspaceList = require('./get-workspace-list.js');
 const npmCliVersion = require('npm-cli-version');
 const fs = require('fs');
+const pkgDir = require('pkg-dir');
 
 const run = function(options) {
   // dependency injection for tests
@@ -14,25 +15,29 @@ const run = function(options) {
   const npmCliVersion_ = options.hasOwnProperty('npmCliVersion') ? options.npmCliVersion : npmCliVersion;
   const console_ = options.hasOwnProperty('console') ? options.console : console;
   const execa_ = options.hasOwnProperty('execa') ? options.execa : execa;
-  const execaOptions = {
-    all: true,
-    cwd: options.directory
-  };
 
-  if (options.renderer === 'verbose') {
-    execaOptions.stdio = 'inherit';
-  }
-
-  return npmCliVersion_().then(function(version) {
-    const npmMajor = parseInt(version.split('.').shift(), 10);
+  return Promise.all([
+    npmCliVersion_(),
+    pkgDir(options.directory)
+  ]).then(function([npmVersion, pkgRoot]) {
+    const npmMajor = parseInt(npmVersion.split('.').shift(), 10);
 
     if (npmMajor < 7) {
-      console_.error(`npm workspaces is unsupported on npm@${version} please upgrade to npm@>=7`);
+      console_.error(`npm workspaces is unsupported on npm@${npmVersion} please upgrade to npm@>=7`);
       return Promise.resolve(1);
     }
 
-    const pkg = require(path.join(options.directory, 'package.json'));
-    let workspaces = getWorkspaceList(pkg, options.directory);
+    const execaOptions = {
+      all: true,
+      cwd: pkgRoot
+    };
+
+    if (options.renderer === 'verbose') {
+      execaOptions.stdio = 'inherit';
+    }
+
+    const pkg = require(path.join(pkgRoot, 'package.json'));
+    let workspaces = getWorkspaceList(pkg, pkgRoot);
 
     if (options.includeRoot) {
       workspaces.push(pkg.name);
@@ -92,7 +97,7 @@ const run = function(options) {
           let subpkg = pkg;
 
           if (workspaceName !== pkg.name) {
-            subpkg = JSON.parse(fs.readFileSync(path.join(options.directory, workspaceName, 'package.json')));
+            subpkg = JSON.parse(fs.readFileSync(path.join(pkgRoot, workspaceName, 'package.json')));
           }
 
           if (!subpkg.scripts || !subpkg.scripts[options.npmScriptName]) {
