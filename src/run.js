@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 const path = require('path');
 const {Listr} = require('listr2');
-const isCI = require('is-ci');
 const execa = require('execa');
 const getWorkspaceList = require('./get-workspace-list.js');
 const npmCliVersion = require('npm-cli-version');
+const isCI = require('is-ci');
 const fs = require('fs');
 const pkgDir = require('pkg-dir');
 const defaultRenderer = require('./get-default-options.js')().renderer;
@@ -84,6 +84,10 @@ const run = function(options) {
 
     const tasks = workspaces.map(function(workspaceName) {
       const args = ['run', options.npmScriptName];
+
+      if (options.ignoreScripts) {
+        args.push('--ignore-scripts');
+      }
 
       if (options.ifPresent) {
         args.push('--if-present');

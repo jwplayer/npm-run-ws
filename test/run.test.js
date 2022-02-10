@@ -438,7 +438,7 @@ test('serial works', function(t) {
 });
 
 test('sanity check for execa', function(t) {
-  return t.context.npmRunWs({npmScriptName: 'test', ifPresent: true, includeRoot: true}).then(function(exitCode) {
+  return t.context.npmRunWs({npmScriptName: 'test', ifPresent: true, includeRoot: true, ignoreScripts: true}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
@@ -451,12 +451,12 @@ test('sanity check for execa', function(t) {
     const tasks = t.context.currentRunner.tasks;
 
     t.is(tasks.length, 6);
-    t.is(tasks[0].title, `npm run test --if-present --workspace ${path.join('workspaces', 'a')}`);
-    t.is(tasks[1].title, `npm run test --if-present --workspace ${path.join('workspaces', 'b')}`);
-    t.is(tasks[2].title, `npm run test --if-present --workspace ${path.join('workspaces', 'c')}`);
-    t.is(tasks[3].title, `npm run test --if-present --workspace ${path.join('workspaces2', 'd')}`);
-    t.is(tasks[4].title, `npm run test --if-present --workspace ${path.join('workspaces3', 'e')}`);
-    t.is(tasks[5].title, 'npm run test --if-present');
+    t.is(tasks[0].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces3', 'e')}`);
+    t.is(tasks[5].title, 'npm run test --ignore-scripts --if-present');
 
     tasks.forEach(function(task) {
       task.task();
@@ -465,12 +465,12 @@ test('sanity check for execa', function(t) {
     t.is(t.context.execaRuns.length, 6);
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
-      ['npm', ['run', 'test', '--if-present', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--if-present', '--workspace', path.join('workspaces', 'b')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--if-present', '--workspace', path.join('workspaces', 'c')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--if-present', '--workspace', path.join('workspaces2', 'd')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--if-present', '--workspace', path.join('workspaces3', 'e')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--if-present'], {all: true, cwd: t.context.dir}]
+      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir}],
+      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces', 'b')], {all: true, cwd: t.context.dir}],
+      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces', 'c')], {all: true, cwd: t.context.dir}],
+      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces2', 'd')], {all: true, cwd: t.context.dir}],
+      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces3', 'e')], {all: true, cwd: t.context.dir}],
+      ['npm', ['run', 'test', '--ignore-scripts', '--if-present'], {all: true, cwd: t.context.dir}]
     ]);
   });
 });

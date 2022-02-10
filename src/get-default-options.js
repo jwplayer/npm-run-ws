@@ -8,5 +8,6 @@ module.exports = () => ({
   serial: false,
   npmScriptName: null,
   listWorkspaces: false,
+  ignoreScripts: false,
   dryRun: false
 });
