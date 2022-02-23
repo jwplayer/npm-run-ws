@@ -58,15 +58,15 @@ const cli = function(args, console, exit) {
       options.ignoreScripts = true;
     } else if ((/^--dry-run$/).test(args[i])) {
       options.dryRun = true;
-    } else if ((/^(-i|--include)(=[\w,]+)?$/).test(args[i])) {
+    } else if ((/^(-i|--include)(=.*)?$/).test(args[i])) {
       const value = (/=/).test(args[i]) ? args[i].split('=').pop() : args[++i];
 
       options.include.push.apply(options.include, value.split(','));
-    } else if ((/^(-e|--exclude)(=[\w,]+)?$/).test(args[i])) {
+    } else if ((/^(-e|--exclude)(=.*)?$/).test(args[i])) {
       const value = (/=/).test(args[i]) ? args[i].split('=').pop() : args[++i];
 
       options.exclude.push.apply(options.exclude, value.split(','));
-    } else if ((/^(-d|--directory)(=\w+)?$/).test(args[i])) {
+    } else if ((/^(-d|--directory)(=.*)?$/).test(args[i])) {
       const value = (/=/).test(args[i]) ? args[i].split('=').pop() : args[++i];
 
       options.directory = value;
