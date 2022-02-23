@@ -1,3 +1,22 @@
+<a name="0.3.0"></a>
+# [0.3.0](https://github.com/jwplayer/npm-run-ws/compare/v0.2.0...v0.3.0) (2022-02-23)
+
+### Features
+
+* support exclude/include/directory= and comma separated exclude/include ([ffac1ee](https://github.com/jwplayer/npm-run-ws/commit/ffac1ee))
+
+### Bug Fixes
+
+* limit concurrency to the number of cpus ([3411e04](https://github.com/jwplayer/npm-run-ws/commit/3411e04))
+
+### Code Refactoring
+
+* smaller code for the same cli arguments ([39782ac](https://github.com/jwplayer/npm-run-ws/commit/39782ac))
+
+### Documentation
+
+* update readme with cli help ([cdad38c](https://github.com/jwplayer/npm-run-ws/commit/cdad38c))
+
 <a name="0.2.0"></a>
 # [0.2.0](https://github.com/jwplayer/npm-run-ws/compare/v0.1.3...v0.2.0) (2022-02-08)
 
