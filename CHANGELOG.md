@@ -1,3 +1,10 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/jwplayer/npm-run-ws/compare/v0.3.0...v0.3.1) (2022-02-23)
+
+### Bug Fixes
+
+* include/exclude/directory= via cli ([8aeb24a](https://github.com/jwplayer/npm-run-ws/commit/8aeb24a))
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/jwplayer/npm-run-ws/compare/v0.2.0...v0.3.0) (2022-02-23)
 
