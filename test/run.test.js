@@ -4,6 +4,7 @@ const fs = require('fs');
 const helpers = require('./helpers.js');
 const npmRunWs = require('../src/run.js');
 const getDefaultOptions = require('../src/get-default-options.js');
+const os = require('os');
 
 test.beforeEach((t) => {
   helpers.beforeEach(t);
@@ -240,7 +241,7 @@ test('tasks are as expected', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -262,7 +263,7 @@ test('ifPresent works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -284,7 +285,7 @@ test('includeRoot works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -307,7 +308,7 @@ test('includeRoot + ifPresent works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -330,7 +331,7 @@ test('verbose works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: 'verbose'
     });
@@ -352,7 +353,7 @@ test('quiet works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: 'silent'
     });
@@ -376,7 +377,7 @@ test('isCI works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: 'verbose'
     });
@@ -400,7 +401,7 @@ test('isCI + interactive works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: 'default'
     });
@@ -444,7 +445,7 @@ test('sanity check for execa', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -482,7 +483,7 @@ test('execa verbose', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: 'verbose'
     });
@@ -512,7 +513,7 @@ test('dryRun works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -541,7 +542,7 @@ test('can fail', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -621,7 +622,7 @@ test('works in a subdirectory', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: true,
+      concurrent: os.cpus().length,
       exitOnError: false,
       renderer: getDefaultOptions().renderer
     });
@@ -641,4 +642,3 @@ test('works in a subdirectory', function(t) {
     ]);
   });
 });
-

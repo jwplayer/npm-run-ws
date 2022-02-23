@@ -8,6 +8,7 @@ const isCI = require('is-ci');
 const fs = require('fs');
 const pkgDir = require('pkg-dir');
 const defaultRenderer = require('./get-default-options.js')().renderer;
+const os = require('os');
 
 const run = function(options) {
   // dependency injection for tests
@@ -120,7 +121,7 @@ const run = function(options) {
     });
 
     const runner = new Listr_(tasks, {
-      concurrent: (options.serial ? false : true),
+      concurrent: (options.serial ? false : os.cpus().length),
       exitOnError: false,
       renderer: options.renderer
     });
