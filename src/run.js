@@ -40,6 +40,10 @@ const run = function(options) {
       env: {FORCE_COLOR: true}
     };
 
+    if (options.stream) {
+      execaOptions.stdio = 'inherit';
+    }
+
     const pkg = require(path.join(pkgRoot, 'package.json'));
     let workspaces = getWorkspaceList(pkg, pkgRoot);
 
@@ -117,7 +121,7 @@ const run = function(options) {
         task: (ctx, task) => options.dryRun ? Promise.resolve() : execa_('npm', args, execaOptions).then(function(result) {
           const success = result.exitCode === 0;
 
-          if (!success || options.renderer === 'verbose') {
+          if (!options.stream && (!success || options.renderer === 'verbose')) {
             const id = `OUTPUT for "${task.title}" ${success ? 'SUCCESS' : 'FAILURE'}`;
             const log = `\n** START ${id}**\n${result.all}\n** END ${id}**\n`;
 

@@ -159,6 +159,18 @@ test('--ignore-scripts sets ignoreScripts', (t) => {
   t.deepEqual(options, expectedOptions);
 });
 
+test('--stream sets stream', (t) => {
+  const options = cli(['--stream'], t.context.console, t.context.exit);
+  const expectedOptions = Object.assign({}, t.context.defaultOptions, {
+    stream: true
+  });
+
+  t.is(t.context.exitCode, null);
+  t.deepEqual(t.context.logs, []);
+  t.deepEqual(t.context.errors, []);
+  t.deepEqual(options, expectedOptions);
+});
+
 ['-ir', '--include-root', '--include-workspace-root'].forEach(function(arg) {
   test(`${arg} sets ifPresent`, (t) => {
     const options = cli([arg], t.context.console, t.context.exit);

@@ -5,6 +5,7 @@ module.exports = () => ({
   ifPresent: false,
   includeRoot: false,
   renderer: 'default',
+  stream: false,
   serial: false,
   npmScriptName: null,
   listWorkspaces: false,

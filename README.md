@@ -30,11 +30,12 @@ npm i --save-dev @jwplayer/npm-run-ws
   Run npm workspace scripts with extra features like serial, parallel, and root project runs.
 
   -v,  --version             Print the version of @jwplayer/npm-run-ws.
-  -V,  --verbose             Print the output of everything.
+  -V,  --verbose             Print the output of everything after completion.
+  --stream                   stream the output to stdout.
   -ip, --if-present          Only run the npm script if present on the workspace.
   -s,  --serial              Run the npm workspace script serially.
   -q,  --quiet               Do not print anything when commands are being run.
-  -in, --interactive         Interactive running list output.
+  -si, --simple               simple command output.
   -ir, --include-root        Run the script on the root workspace as well.
   --include-workspace-root   Alias for --include-root used by npm.
   -i,  --include[=name,name] Run on workspaces that match this. Can pass more than one.

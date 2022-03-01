@@ -11,7 +11,8 @@ const printHelp = function(console) {
   console.log(`  ${pkg.description}`);
   console.log();
   console.log(`  -v,  --version             Print the version of ${pkg.name}.`);
-  console.log('  -V,  --verbose             Print the output of everything.');
+  console.log('  -V,  --verbose             Print the output of everything after completion.');
+  console.log('  --stream                   stream the output to stdout.');
   console.log('  -ip, --if-present          Only run the npm script if present on the workspace.');
   console.log('  -s,  --serial              Run the npm workspace script serially.');
   console.log('  -q,  --quiet               Do not print anything when commands are being run.');
@@ -42,6 +43,8 @@ const cli = function(args, console, exit) {
       return options;
     } else if ((/^-V|--verbose$/).test(args[i])) {
       options.renderer = 'verbose';
+    } else if ((/^--stream$/).test(args[i])) {
+      options.stream = true;
     } else if ((/^-si|--simple$/).test(args[i])) {
       options.renderer = 'simple';
     } else if ((/^-s|--serial$/).test(args[i])) {

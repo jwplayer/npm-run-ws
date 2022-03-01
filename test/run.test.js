@@ -493,6 +493,52 @@ test('sanity check for execa', function(t) {
   });
 });
 
+test('stream works', function(t) {
+  return t.context.npmRunWs({npmScriptName: 'test', ifPresent: true, includeRoot: true, stream: true}).then(function(exitCode) {
+    t.is(exitCode, 0);
+    t.truthy(t.context.currentRunner);
+    t.deepEqual(t.context.currentRunner.options, {
+      concurrent: os.cpus().length,
+      exitOnError: false,
+      renderer: getDefaultOptions().renderer
+    });
+    const tasks = t.context.currentRunner.tasks;
+    const baseStr = 'npm run test --if-present';
+    const wsStr = `${baseStr} --workspace`;
+
+    t.is(tasks.length, 6);
+    t.is(tasks[0].title, `${wsStr} ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `${wsStr} ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `${wsStr} ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `${wsStr} ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `${wsStr} ${path.join('workspaces3', 'e')}`);
+    t.is(tasks[5].title, baseStr);
+
+    return Promise.all(tasks.map(function(task) {
+      return task.task({}, task);
+    }));
+  }).then(function() {
+
+    t.is(t.context.execaRuns.length, 6);
+    const cmd = ['run', 'test', '--if-present'];
+    const wsCmd = cmd.concat(['--workspace']);
+    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false, stdio: 'inherit'};
+
+    // verify the execa command
+    t.deepEqual(t.context.execaRuns, [
+      ['npm', wsCmd.concat([path.join('workspaces', 'a')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces', 'b')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces', 'c')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces2', 'd')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces3', 'e')]), options],
+      ['npm', cmd, options]
+    ]);
+
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors, []);
+  });
+});
+
 test('execa verbose', function(t) {
   return t.context.npmRunWs({npmScriptName: 'test', include: ['a', 'b'], renderer: 'verbose'}).then(function(exitCode) {
     t.is(exitCode, 0);
