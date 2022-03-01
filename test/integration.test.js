@@ -106,16 +106,16 @@ test('can run verbose', function(t) {
       '',
       '',
       '',
-      '** END OUTPUT for "npm run foo --if-present --workspace workspaces/a" SUCCESS**',
-      '** END OUTPUT for "npm run foo --if-present --workspace workspaces/b" SUCCESS**',
-      '** END OUTPUT for "npm run foo --if-present --workspace workspaces/c" SUCCESS**',
-      '** END OUTPUT for "npm run foo --if-present --workspace workspaces2/d" SUCCESS**',
-      '** END OUTPUT for "npm run foo --if-present --workspace workspaces3/e" SUCCESS**',
-      '** START OUTPUT for "npm run foo --if-present --workspace workspaces/a" SUCCESS**',
-      '** START OUTPUT for "npm run foo --if-present --workspace workspaces/b" SUCCESS**',
-      '** START OUTPUT for "npm run foo --if-present --workspace workspaces/c" SUCCESS**',
-      '** START OUTPUT for "npm run foo --if-present --workspace workspaces2/d" SUCCESS**',
-      '** START OUTPUT for "npm run foo --if-present --workspace workspaces3/e" SUCCESS**',
+      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'a')}" SUCCESS**`,
+      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'b')}" SUCCESS**`,
+      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'c')}" SUCCESS**`,
+      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces2', 'd')}" SUCCESS**`,
+      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces3', 'e')}" SUCCESS**`,
+      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'a')}" SUCCESS**`,
+      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'b')}" SUCCESS**`,
+      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'c')}" SUCCESS**`,
+      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces2', 'd')}" SUCCESS**`,
+      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces3', 'e')}" SUCCESS**`,
       '> a@1.0.0 foo',
       '> b@1.0.0 foo',
       '> c@1.0.0 foo',
@@ -126,7 +126,7 @@ test('can run verbose', function(t) {
       '> node -e "fs.writeFileSync(\'run-test\', \'\')"',
       '> node -e "fs.writeFileSync(\'run-test\', \'\')"',
       '> node -e "fs.writeFileSync(\'run-test\', \'\')"'
-    ]);
+    ].sort());
     t.deepEqual(t.context.errors, []);
   });
 });
