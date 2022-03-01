@@ -1,3 +1,10 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/jwplayer/npm-run-ws/compare/v0.3.1...v0.4.0) (2022-03-01)
+
+### Features
+
+* **BREAKING:** do not stream command output, only output after finish ([21df4b5](https://github.com/jwplayer/npm-run-ws/commit/21df4b5))
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/jwplayer/npm-run-ws/compare/v0.3.0...v0.3.1) (2022-02-23)
 
