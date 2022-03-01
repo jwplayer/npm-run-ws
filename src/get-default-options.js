@@ -4,7 +4,7 @@ module.exports = () => ({
   exclude: [],
   ifPresent: false,
   includeRoot: false,
-  renderer: 'simple',
+  renderer: 'default',
   serial: false,
   npmScriptName: null,
   listWorkspaces: false,

@@ -6,6 +6,16 @@ const npmRunWs = require('../src/run.js');
 const getDefaultOptions = require('../src/get-default-options.js');
 const os = require('os');
 
+const fakeLogger = function(arr) {
+  return (...logs) => {
+    logs.forEach(function(log) {
+      const logLines = log ? log.split(/\r\n|\r|\n/) : [''];
+
+      arr.push(...logLines);
+    });
+  };
+};
+
 test.beforeEach((t) => {
   helpers.beforeEach(t);
 
@@ -28,12 +38,8 @@ test.beforeEach((t) => {
   t.context.logs = [];
   t.context.errors = [];
   t.context.console = {
-    log(...args) {
-      t.context.logs.push.apply(t.context.logs, args);
-    },
-    error(...args) {
-      t.context.errors.push.apply(t.context.errors, args);
-    }
+    log: fakeLogger(t.context.logs),
+    error: fakeLogger(t.context.errors)
   };
   t.context.isCI = false;
 
@@ -66,9 +72,14 @@ test.beforeEach((t) => {
     return runner;
   };
 
+  t.context.execaReturn = {
+    exitCode: 0,
+    all: 'foo'
+  };
   t.context.execaRuns = [];
   t.context.execa = function(bin, args, options) {
     t.context.execaRuns.push([bin, args, options]);
+    return Promise.resolve(t.context.execaReturn);
   };
 
   t.context.npmRunWs = function(options) {
@@ -392,10 +403,10 @@ test('isCI works', function(t) {
   });
 });
 
-test('isCI + interactive works', function(t) {
+test('isCI + simple works', function(t) {
   t.context.isCI = true;
 
-  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'default'}).then(function(exitCode) {
+  return t.context.npmRunWs({npmScriptName: 'test', renderer: 'simple'}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
@@ -403,7 +414,7 @@ test('isCI + interactive works', function(t) {
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: os.cpus().length,
       exitOnError: false,
-      renderer: 'default'
+      renderer: 'simple'
     });
     const tasks = t.context.currentRunner.tasks;
 
@@ -450,28 +461,34 @@ test('sanity check for execa', function(t) {
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
+    const baseStr = 'npm run test --ignore-scripts --if-present';
+    const wsStr = `${baseStr} --workspace`;
 
     t.is(tasks.length, 6);
-    t.is(tasks[0].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces', 'a')}`);
-    t.is(tasks[1].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces', 'b')}`);
-    t.is(tasks[2].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces', 'c')}`);
-    t.is(tasks[3].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces2', 'd')}`);
-    t.is(tasks[4].title, `npm run test --ignore-scripts --if-present --workspace ${path.join('workspaces3', 'e')}`);
-    t.is(tasks[5].title, 'npm run test --ignore-scripts --if-present');
+    t.is(tasks[0].title, `${wsStr} ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `${wsStr} ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `${wsStr} ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `${wsStr} ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `${wsStr} ${path.join('workspaces3', 'e')}`);
+    t.is(tasks[5].title, baseStr);
 
     tasks.forEach(function(task) {
-      task.task();
+      task.task({}, task);
     });
 
     t.is(t.context.execaRuns.length, 6);
+    const cmd = ['run', 'test', '--ignore-scripts', '--if-present'];
+    const wsCmd = cmd.concat(['--workspace']);
+    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false};
+
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
-      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces', 'b')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces', 'c')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces2', 'd')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--ignore-scripts', '--if-present', '--workspace', path.join('workspaces3', 'e')], {all: true, cwd: t.context.dir}],
-      ['npm', ['run', 'test', '--ignore-scripts', '--if-present'], {all: true, cwd: t.context.dir}]
+      ['npm', wsCmd.concat([path.join('workspaces', 'a')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces', 'b')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces', 'c')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces2', 'd')]), options],
+      ['npm', wsCmd.concat([path.join('workspaces3', 'e')]), options],
+      ['npm', cmd, options]
     ]);
   });
 });
@@ -479,8 +496,6 @@ test('sanity check for execa', function(t) {
 test('execa verbose', function(t) {
   return t.context.npmRunWs({npmScriptName: 'test', include: ['a', 'b'], renderer: 'verbose'}).then(function(exitCode) {
     t.is(exitCode, 0);
-    t.deepEqual(t.context.logs, []);
-    t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: os.cpus().length,
@@ -491,26 +506,39 @@ test('execa verbose', function(t) {
 
     t.is(tasks.length, 2);
 
-    tasks.forEach(function(task) {
-      task.task();
-    });
-
+    return Promise.all(tasks.map(function(task) {
+      return task.task({}, task);
+    }));
+  }).then(function() {
     t.is(t.context.execaRuns.length, 2);
+    const cmd = ['run', 'test', '--workspace'];
+    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false};
+
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
-      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir, stdio: 'inherit'}],
-      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'b')], {all: true, cwd: t.context.dir, stdio: 'inherit'}]
+      ['npm', cmd.concat([path.join('workspaces', 'a')]), options],
+      ['npm', cmd.concat([path.join('workspaces', 'b')]), options]
     ]);
+
+    t.deepEqual(t.context.logs, [
+      '',
+      '** START OUTPUT for "npm run test --workspace workspaces/a" SUCCESS**',
+      'foo',
+      '** END OUTPUT for "npm run test --workspace workspaces/a" SUCCESS**',
+      '',
+      '',
+      '** START OUTPUT for "npm run test --workspace workspaces/b" SUCCESS**',
+      'foo',
+      '** END OUTPUT for "npm run test --workspace workspaces/b" SUCCESS**',
+      ''
+    ]);
+    t.deepEqual(t.context.errors, []);
   });
 });
 
 test('dryRun works', function(t) {
   return t.context.npmRunWs({npmScriptName: 'test', dryRun: true}).then(function(exitCode) {
     t.is(exitCode, 0);
-    t.deepEqual(t.context.logs, [
-      'NOTE: this is a dry run, commands are not actually being run!'
-    ]);
-    t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: os.cpus().length,
@@ -518,28 +546,36 @@ test('dryRun works', function(t) {
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
+    const baseStr = 'npm run test --workspace';
 
     t.is(tasks.length, 5);
-    t.is(tasks[0].title, `npm run test --workspace ${path.join('workspaces', 'a')}`);
-    t.is(tasks[1].title, `npm run test --workspace ${path.join('workspaces', 'b')}`);
-    t.is(tasks[2].title, `npm run test --workspace ${path.join('workspaces', 'c')}`);
-    t.is(tasks[3].title, `npm run test --workspace ${path.join('workspaces2', 'd')}`);
-    t.is(tasks[4].title, `npm run test --workspace ${path.join('workspaces3', 'e')}`);
+    t.is(tasks[0].title, `${baseStr} ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `${baseStr} ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `${baseStr} ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `${baseStr} ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `${baseStr} ${path.join('workspaces3', 'e')}`);
 
-    tasks[0].task();
+    tasks.forEach(function(task) {
+      task.task({}, task);
+    });
 
     // nothing is run thorugh execa
     t.deepEqual(t.context.execaRuns, []);
+    t.deepEqual(t.context.logs, [
+      'NOTE: this is a dry run, commands are not actually being run!'
+    ]);
+    t.deepEqual(t.context.errors, []);
   });
 });
 
 test('can fail', function(t) {
   t.context.taskFail = true;
+  t.context.execaReturn.exitCode = 1;
+  const baseStr = 'npm run test --workspace';
 
   return t.context.npmRunWs({npmScriptName: 'test'}).then(function(exitCode) {
+
     t.is(exitCode, 1);
-    t.deepEqual(t.context.logs, []);
-    t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
       concurrent: os.cpus().length,
@@ -549,11 +585,52 @@ test('can fail', function(t) {
     const tasks = t.context.currentRunner.tasks;
 
     t.is(tasks.length, 5);
-    t.is(tasks[0].title, `npm run test --workspace ${path.join('workspaces', 'a')}`);
-    t.is(tasks[1].title, `npm run test --workspace ${path.join('workspaces', 'b')}`);
-    t.is(tasks[2].title, `npm run test --workspace ${path.join('workspaces', 'c')}`);
-    t.is(tasks[3].title, `npm run test --workspace ${path.join('workspaces2', 'd')}`);
-    t.is(tasks[4].title, `npm run test --workspace ${path.join('workspaces3', 'e')}`);
+    t.is(tasks[0].title, `${baseStr} ${path.join('workspaces', 'a')}`);
+    t.is(tasks[1].title, `${baseStr} ${path.join('workspaces', 'b')}`);
+    t.is(tasks[2].title, `${baseStr} ${path.join('workspaces', 'c')}`);
+    t.is(tasks[3].title, `${baseStr} ${path.join('workspaces2', 'd')}`);
+    t.is(tasks[4].title, `${baseStr} ${path.join('workspaces3', 'e')}`);
+
+    return Promise.all(tasks.map(function(task) {
+      return task.task({}, task).catch(() => {});
+    }));
+  }).then(function() {
+
+    t.deepEqual(t.context.logs, []);
+    t.deepEqual(t.context.errors.sort(), [
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '',
+      '* npm run test --workspace workspaces/a',
+      '* npm run test --workspace workspaces/b',
+      '* npm run test --workspace workspaces/c',
+      '* npm run test --workspace workspaces2/d',
+      '* npm run test --workspace workspaces3/e',
+      '** END OUTPUT for "npm run test --workspace workspaces/a" FAILURE**',
+      '** END OUTPUT for "npm run test --workspace workspaces/b" FAILURE**',
+      '** END OUTPUT for "npm run test --workspace workspaces/c" FAILURE**',
+      '** END OUTPUT for "npm run test --workspace workspaces2/d" FAILURE**',
+      '** END OUTPUT for "npm run test --workspace workspaces3/e" FAILURE**',
+      '** START OUTPUT for "npm run test --workspace workspaces/a" FAILURE**',
+      '** START OUTPUT for "npm run test --workspace workspaces/b" FAILURE**',
+      '** START OUTPUT for "npm run test --workspace workspaces/c" FAILURE**',
+      '** START OUTPUT for "npm run test --workspace workspaces2/d" FAILURE**',
+      '** START OUTPUT for "npm run test --workspace workspaces3/e" FAILURE**',
+      'The following commands failed:',
+      'foo',
+      'foo',
+      'foo',
+      'foo',
+      'foo'
+    ].sort());
   });
 });
 
@@ -632,13 +709,15 @@ test('works in a subdirectory', function(t) {
     t.is(tasks[0].title, `npm run test --workspace ${path.join('workspaces', 'a')}`);
 
     tasks.forEach(function(task) {
-      task.task();
+      task.task({}, task);
     });
+
+    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false};
 
     t.is(t.context.execaRuns.length, 1);
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
-      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'a')], {all: true, cwd: t.context.dir}]
+      ['npm', ['run', 'test', '--workspace', path.join('workspaces', 'a')], options]
     ]);
   });
 });

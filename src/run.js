@@ -35,12 +35,10 @@ const run = function(options) {
 
     const execaOptions = {
       all: true,
-      cwd: pkgRoot
+      cwd: pkgRoot,
+      reject: false,
+      env: {FORCE_COLOR: true}
     };
-
-    if (options.renderer === 'verbose') {
-      execaOptions.stdio = 'inherit';
-    }
 
     const pkg = require(path.join(pkgRoot, 'package.json'));
     let workspaces = getWorkspaceList(pkg, pkgRoot);
@@ -116,7 +114,22 @@ const run = function(options) {
 
           return false;
         },
-        task: () => options.dryRun ? Promise.resolve() : execa_('npm', args, execaOptions)
+        task: (ctx, task) => options.dryRun ? Promise.resolve() : execa_('npm', args, execaOptions).then(function(result) {
+          const success = result.exitCode === 0;
+
+          if (!success || options.renderer === 'verbose') {
+            const id = `OUTPUT for "${task.title}" ${success ? 'SUCCESS' : 'FAILURE'}`;
+            const log = `\n** START ${id}**\n${result.all}\n** END ${id}**\n`;
+
+            if (!success) {
+              console_.error(log);
+            } else {
+              console_.log(log);
+            }
+          }
+
+          return (success ? Promise.resolve() : Promise.reject());
+        })
       };
     });
 
@@ -131,9 +144,21 @@ const run = function(options) {
     }
 
     return runner.run().then(function() {
-      const failure = runner.tasks.some((task) => task.hasFailed());
+      const failures = [];
 
-      return Promise.resolve(failure ? 1 : 0);
+      runner.tasks.forEach((task) => {
+        if (task.hasFailed()) {
+          failures.push(task.title);
+        }
+      });
+
+      if (failures.length) {
+        console_.error(`\nThe following commands failed:\n* ${failures.join('\n* ')}`);
+
+        return Promise.resolve(1);
+      }
+
+      return Promise.resolve(0);
     });
   });
 };

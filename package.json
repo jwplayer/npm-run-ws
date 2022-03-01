@@ -36,10 +36,16 @@
     "uuid": "8.3.2",
     "videojs-standard": "^9.0.1"
   },
+  "ava": {
+    "files": [
+      "test/**/*.test.js"
+    ]
+  },
   "scripts": {
     "lint": "vjsstandard",
     "test": "npm-run-all -p -c lint test:*",
-    "test:unit": "nyc --reporter=json --reporter=text ava --timeout 1m './test/*.test.js'",
+    "test:unit": "nyc --reporter=json --reporter=text ava ",
+    "watch": "ava --watch",
     "preversion": "npm test",
     "version": "is-prerelease || npm run update-changelog && git add CHANGELOG.md",
     "update-changelog": "conventional-changelog -p videojs -i CHANGELOG.md -s"
