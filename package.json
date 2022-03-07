@@ -1,6 +1,6 @@
 {
   "name": "@jwplayer/npm-run-ws",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Run npm workspace scripts with extra features like serial, parallel, and root project runs.",
   "main": "src/run.js",
   "bin": {

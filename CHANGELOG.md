@@ -1,3 +1,10 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/jwplayer/npm-run-ws/compare/v0.5.1...v0.6.0) (2022-03-07)
+
+### Features
+
+* use node-pty to always have colors ([c56eecc](https://github.com/jwplayer/npm-run-ws/commit/c56eecc))
+
 <a name="0.5.1"></a>
 ## [0.5.1](https://github.com/jwplayer/npm-run-ws/compare/v0.5.0...v0.5.1) (2022-03-07)
 
