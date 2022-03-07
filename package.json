@@ -18,7 +18,7 @@
   "dependencies": {
     "execa": "^5.1.1",
     "is-ci": "^3.0.1",
-    "listr2": "^4.0.1",
+    "listr2": "^4.0.4",
     "npm-cli-version": "1.0.0",
     "shelljs": "^0.8.5",
     "pkg-dir": "5.0.0"

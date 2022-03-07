@@ -566,18 +566,7 @@ test('execa verbose', function(t) {
       ['npm', cmd.concat([path.join('workspaces', 'b')]), options]
     ]);
 
-    t.deepEqual(t.context.logs, [
-      '',
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces', 'a')}" SUCCESS**`,
-      'foo',
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces', 'a')}" SUCCESS**`,
-      '',
-      '',
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces', 'b')}" SUCCESS**`,
-      'foo',
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces', 'b')}" SUCCESS**`,
-      ''
-    ]);
+    t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
   });
 });
@@ -645,37 +634,12 @@ test('can fail', function(t) {
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors.sort(), [
       '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
       `* npm run test --workspace ${path.join('workspaces', 'a')}`,
       `* npm run test --workspace ${path.join('workspaces', 'b')}`,
       `* npm run test --workspace ${path.join('workspaces', 'c')}`,
       `* npm run test --workspace ${path.join('workspaces2', 'd')}`,
       `* npm run test --workspace ${path.join('workspaces3', 'e')}`,
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces', 'a')}" FAILURE**`,
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces', 'b')}" FAILURE**`,
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces', 'c')}" FAILURE**`,
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces2', 'd')}" FAILURE**`,
-      `** END OUTPUT for "npm run test --workspace ${path.join('workspaces3', 'e')}" FAILURE**`,
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces', 'a')}" FAILURE**`,
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces', 'b')}" FAILURE**`,
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces', 'c')}" FAILURE**`,
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces2', 'd')}" FAILURE**`,
-      `** START OUTPUT for "npm run test --workspace ${path.join('workspaces3', 'e')}" FAILURE**`,
-      'The following commands failed:',
-      'foo',
-      'foo',
-      'foo',
-      'foo',
-      'foo'
+      'The following commands failed:'
     ].sort());
   });
 });

@@ -102,6 +102,7 @@ const run = function(options) {
 
       return {
         title: `npm ${args.join(' ')}`,
+        exitOnError: false,
         skip: (ctx) => {
           if (!options.ifPresent) {
             return false;
@@ -122,17 +123,16 @@ const run = function(options) {
           const success = result.exitCode === 0;
 
           if (!options.stream && (!success || options.renderer === 'verbose')) {
-            const id = `OUTPUT for "${task.title}" ${success ? 'SUCCESS' : 'FAILURE'}`;
-            const log = `\n** START ${id}**\n${result.all}\n** END ${id}**\n`;
+            const line = `${task.title}\n${result.all}`;
 
             if (!success) {
-              console_.error(log);
+              throw Error(line);
             } else {
-              console_.log(log);
+              task.output = line;
             }
           }
 
-          return (success ? Promise.resolve() : Promise.reject());
+          return Promise.resolve();
         })
       };
     });

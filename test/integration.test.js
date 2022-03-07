@@ -85,48 +85,7 @@ test('can run verbose', function(t) {
     t.true(shell.test('-f', path.join(t.context.dir, 'workspaces2', 'd', 'run-test')));
     t.true(shell.test('-f', path.join(t.context.dir, 'workspaces3', 'e', 'run-test')));
 
-    t.deepEqual(t.context.logs.sort(), [
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'a')}" SUCCESS**`,
-      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'b')}" SUCCESS**`,
-      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'c')}" SUCCESS**`,
-      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces2', 'd')}" SUCCESS**`,
-      `** END OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces3', 'e')}" SUCCESS**`,
-      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'a')}" SUCCESS**`,
-      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'b')}" SUCCESS**`,
-      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces', 'c')}" SUCCESS**`,
-      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces2', 'd')}" SUCCESS**`,
-      `** START OUTPUT for "npm run foo --if-present --workspace ${path.join('workspaces3', 'e')}" SUCCESS**`,
-      '> a@1.0.0 foo',
-      '> b@1.0.0 foo',
-      '> c@1.0.0 foo',
-      '> d@1.0.0 foo',
-      '> e@1.0.0 foo',
-      '> node -e "fs.writeFileSync(\'run-test\', \'\')"',
-      '> node -e "fs.writeFileSync(\'run-test\', \'\')"',
-      '> node -e "fs.writeFileSync(\'run-test\', \'\')"',
-      '> node -e "fs.writeFileSync(\'run-test\', \'\')"',
-      '> node -e "fs.writeFileSync(\'run-test\', \'\')"'
-    ].sort());
+    t.deepEqual(t.context.logs.sort(), [].sort());
     t.deepEqual(t.context.errors, []);
   });
 });
