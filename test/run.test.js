@@ -73,8 +73,7 @@ test.beforeEach((t) => {
   };
 
   t.context.execaReturn = {
-    exitCode: 0,
-    all: 'foo'
+    exitCode: 0
   };
   t.context.execaRuns = [];
   t.context.execa = function(bin, args, options) {
@@ -479,7 +478,7 @@ test('sanity check for execa', function(t) {
     t.is(t.context.execaRuns.length, 6);
     const cmd = ['run', 'test', '--ignore-scripts', '--if-present'];
     const wsCmd = cmd.concat(['--workspace']);
-    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false};
+    const options = {cwd: t.context.dir};
 
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
@@ -522,7 +521,7 @@ test('stream works', function(t) {
     t.is(t.context.execaRuns.length, 6);
     const cmd = ['run', 'test', '--if-present'];
     const wsCmd = cmd.concat(['--workspace']);
-    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false, stdio: 'inherit'};
+    const options = {cwd: t.context.dir, stream: true};
 
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
@@ -558,7 +557,7 @@ test('execa verbose', function(t) {
   }).then(function() {
     t.is(t.context.execaRuns.length, 2);
     const cmd = ['run', 'test', '--workspace'];
-    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false};
+    const options = {cwd: t.context.dir};
 
     // verify the execa command
     t.deepEqual(t.context.execaRuns, [
@@ -722,7 +721,7 @@ test('works in a subdirectory', function(t) {
       task.task({}, task);
     });
 
-    const options = {all: true, cwd: t.context.dir, env: {FORCE_COLOR: true}, reject: false};
+    const options = {cwd: t.context.dir};
 
     t.is(t.context.execaRuns.length, 1);
     // verify the execa command

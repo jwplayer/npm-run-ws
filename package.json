@@ -16,12 +16,14 @@
   "author": "bcasey@jwplayer.com",
   "license": "MIT",
   "dependencies": {
-    "execa": "^5.1.1",
     "is-ci": "^3.0.1",
     "listr2": "^4.0.4",
+    "node-pty": "0.10.1",
     "npm-cli-version": "1.0.0",
+    "pkg-dir": "5.0.0",
     "shelljs": "^0.8.5",
-    "pkg-dir": "5.0.0"
+    "signal-exit": "3.0.7",
+    "which": "2.0.2"
   },
   "devDependencies": {
     "ava": "^3.15.0",

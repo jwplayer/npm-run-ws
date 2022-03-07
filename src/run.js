@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 const path = require('path');
 const {Listr} = require('listr2');
-const execa = require('execa');
+const execa = require('./spawn.js');
 const getWorkspaceList = require('./get-workspace-list.js');
 const npmCliVersion = require('npm-cli-version');
 const isCI = require('is-ci');
@@ -34,14 +34,11 @@ const run = function(options) {
     }
 
     const execaOptions = {
-      all: true,
-      cwd: pkgRoot,
-      reject: false,
-      env: {FORCE_COLOR: true}
+      cwd: pkgRoot
     };
 
     if (options.stream) {
-      execaOptions.stdio = 'inherit';
+      execaOptions.stream = true;
     }
 
     const pkg = require(path.join(pkgRoot, 'package.json'));
@@ -100,6 +97,30 @@ const run = function(options) {
         args.push('--workspace', workspaceName);
       }
 
+      let task;
+
+      if (options.dryRun) {
+        task = () => Promise.resolve;
+      } else {
+        task = (ctx, task_) => {
+          return execa_('npm', args, execaOptions).then(function(result) {
+            const success = result.exitCode === 0;
+
+            if (!options.stream && (!success || options.renderer === 'verbose')) {
+              const line = `${task_.title}\n${result.all}`;
+
+              if (!success) {
+                throw Error(line);
+              } else {
+                task_.output = line;
+              }
+            }
+
+            return Promise.resolve();
+          });
+        };
+      }
+
       return {
         title: `npm ${args.join(' ')}`,
         exitOnError: false,
@@ -119,21 +140,7 @@ const run = function(options) {
 
           return false;
         },
-        task: (ctx, task) => options.dryRun ? Promise.resolve() : execa_('npm', args, execaOptions).then(function(result) {
-          const success = result.exitCode === 0;
-
-          if (!options.stream && (!success || options.renderer === 'verbose')) {
-            const line = `${task.title}\n${result.all}`;
-
-            if (!success) {
-              throw Error(line);
-            } else {
-              task.output = line;
-            }
-          }
-
-          return Promise.resolve();
-        })
+        task
       };
     });
 
