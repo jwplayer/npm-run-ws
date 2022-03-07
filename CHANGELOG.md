@@ -1,3 +1,10 @@
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/jwplayer/npm-run-ws/compare/v0.6.0...v0.6.1) (2022-03-07)
+
+### Bug Fixes
+
+* force color ([d33ab5e](https://github.com/jwplayer/npm-run-ws/commit/d33ab5e))
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/jwplayer/npm-run-ws/compare/v0.5.1...v0.6.0) (2022-03-07)
 
