@@ -1,3 +1,10 @@
+<a name="0.5.1"></a>
+## [0.5.1](https://github.com/jwplayer/npm-run-ws/compare/v0.5.0...v0.5.1) (2022-03-07)
+
+### Bug Fixes
+
+* better task output ([8933fbe](https://github.com/jwplayer/npm-run-ws/commit/8933fbe))
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/jwplayer/npm-run-ws/compare/v0.4.0...v0.5.0) (2022-03-01)
 
