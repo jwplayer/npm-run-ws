@@ -10,7 +10,7 @@ const spawn = (cmd, args, options) => which(cmd).then((realcmd) => new Promise(f
     env: {}
   }, options);
 
-  options.env = Object.assign({}, process.env, options.env);
+  options.env = Object.assign({FORCE_COLOR: '1'}, process.env, options.env);
 
   const stream = options.stream;
   const child = pty.spawn(realcmd, args, options);
