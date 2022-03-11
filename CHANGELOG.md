@@ -1,3 +1,10 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/jwplayer/npm-run-ws/compare/v0.6.1...v0.7.0) (2022-03-11)
+
+### Features
+
+* show task timers, remove serial, make throttle optional ([998a0f2](https://github.com/jwplayer/npm-run-ws/commit/998a0f2))
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://github.com/jwplayer/npm-run-ws/compare/v0.6.0...v0.6.1) (2022-03-07)
 
