@@ -119,11 +119,11 @@ test('--dry-run sets dryRun', (t) => {
   });
 });
 
-['-s', '--serial'].forEach(function(arg) {
-  test(`${arg} sets serial`, (t) => {
+['-th', '--throttle'].forEach(function(arg) {
+  test(`${arg} sets throttle`, (t) => {
     const options = cli([arg], t.context.console, t.context.exit);
     const expectedOptions = Object.assign({}, t.context.defaultOptions, {
-      serial: true
+      throttle: true
     });
 
     t.is(t.context.exitCode, null);
@@ -286,7 +286,7 @@ test('can set multiple arguments', (t) => {
     '-i', 'foo',
     '-e', 'foo',
     '-d', 'foo',
-    '-s', '-ip',
+    '-th', '-ip',
     '-ir', '-V',
     '--ignore-scripts',
     'foo'
@@ -299,7 +299,7 @@ test('can set multiple arguments', (t) => {
     ifPresent: true,
     renderer: 'verbose',
     npmScriptName: 'foo',
-    serial: true,
+    throttle: true,
     ignoreScripts: true
   });
 

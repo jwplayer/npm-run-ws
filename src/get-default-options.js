@@ -6,7 +6,7 @@ module.exports = () => ({
   includeRoot: false,
   renderer: 'default',
   stream: false,
-  serial: false,
+  throttle: false,
   npmScriptName: null,
   listWorkspaces: false,
   ignoreScripts: false,

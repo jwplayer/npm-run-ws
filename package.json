@@ -41,7 +41,8 @@
   "ava": {
     "files": [
       "test/**/*.test.js"
-    ]
+    ],
+    "timeout": "1m"
   },
   "scripts": {
     "lint": "vjsstandard",

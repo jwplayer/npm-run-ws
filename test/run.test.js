@@ -251,8 +251,9 @@ test('tasks are as expected', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -273,8 +274,9 @@ test('ifPresent works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -295,8 +297,9 @@ test('includeRoot works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -318,8 +321,9 @@ test('includeRoot + ifPresent works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -341,8 +345,9 @@ test('verbose works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: 'verbose'
     });
     const tasks = t.context.currentRunner.tasks;
@@ -363,8 +368,9 @@ test('quiet works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: 'silent'
     });
     const tasks = t.context.currentRunner.tasks;
@@ -387,8 +393,9 @@ test('isCI works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: 'verbose'
     });
     const tasks = t.context.currentRunner.tasks;
@@ -411,8 +418,9 @@ test('isCI + simple works', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: 'simple'
     });
     const tasks = t.context.currentRunner.tasks;
@@ -426,15 +434,16 @@ test('isCI + simple works', function(t) {
   });
 });
 
-test('serial works', function(t) {
-  return t.context.npmRunWs({npmScriptName: 'test', serial: true}).then(function(exitCode) {
+test('throttle works', function(t) {
+  return t.context.npmRunWs({npmScriptName: 'test', throttle: true}).then(function(exitCode) {
     t.is(exitCode, 0);
     t.deepEqual(t.context.logs, []);
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: false,
+      concurrent: os.cpus().length,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -455,8 +464,9 @@ test('sanity check for execa', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -497,8 +507,9 @@ test('stream works', function(t) {
     t.is(exitCode, 0);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -543,8 +554,9 @@ test('execa verbose', function(t) {
     t.is(exitCode, 0);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: 'verbose'
     });
     const tasks = t.context.currentRunner.tasks;
@@ -575,8 +587,9 @@ test('dryRun works', function(t) {
     t.is(exitCode, 0);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -612,8 +625,9 @@ test('can fail', function(t) {
     t.is(exitCode, 1);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;
@@ -708,8 +722,9 @@ test('works in a subdirectory', function(t) {
     t.deepEqual(t.context.errors, []);
     t.truthy(t.context.currentRunner);
     t.deepEqual(t.context.currentRunner.options, {
-      concurrent: os.cpus().length,
+      concurrent: true,
       exitOnError: false,
+      rendererOptions: {showTimer: true},
       renderer: getDefaultOptions().renderer
     });
     const tasks = t.context.currentRunner.tasks;

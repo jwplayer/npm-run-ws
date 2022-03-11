@@ -123,7 +123,6 @@ const run = function(options) {
 
       return {
         title: `npm ${args.join(' ')}`,
-        exitOnError: false,
         skip: (ctx) => {
           if (!options.ifPresent) {
             return false;
@@ -145,9 +144,10 @@ const run = function(options) {
     });
 
     const runner = new Listr_(tasks, {
-      concurrent: (options.serial ? false : os.cpus().length),
+      concurrent: (options.throttle ? os.cpus().length : true),
       exitOnError: false,
-      renderer: options.renderer
+      renderer: options.renderer,
+      rendererOptions: {showTimer: true}
     });
 
     if (options.dryRun) {

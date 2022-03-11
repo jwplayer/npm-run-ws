@@ -14,9 +14,9 @@ const printHelp = function(console) {
   console.log('  -V,  --verbose             Print the output of everything after completion.');
   console.log('  --stream                   stream the output to stdout.');
   console.log('  -ip, --if-present          Only run the npm script if present on the workspace.');
-  console.log('  -s,  --serial              Run the npm workspace script serially.');
+  console.log('  -th,  --throttle           throttle the processes that can run to your cpu count.');
   console.log('  -q,  --quiet               Do not print anything when commands are being run.');
-  console.log('  -si, --simple               simple command output.');
+  console.log('  -si, --simple              simple command output.');
   console.log('  -ir, --include-root        Run the script on the root workspace as well.');
   console.log('  --include-workspace-root   Alias for --include-root used by npm.');
   console.log('  -i,  --include[=name,name] Run on workspaces that match this. Can pass more than one.');
@@ -47,8 +47,8 @@ const cli = function(args, console, exit) {
       options.stream = true;
     } else if ((/^-si|--simple$/).test(args[i])) {
       options.renderer = 'simple';
-    } else if ((/^-s|--serial$/).test(args[i])) {
-      options.serial = true;
+    } else if ((/^-th|--throttle$/).test(args[i])) {
+      options.throttle = true;
     } else if ((/^-q|--quiet$/).test(args[i])) {
       options.renderer = 'silent';
     } else if ((/^-ip|--if-present$/).test(args[i])) {
